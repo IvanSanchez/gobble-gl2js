@@ -1,0 +1,27 @@
+{
+  "name": "gobble-gl2js",
+  "version": "0.1.0",
+  "description": "",
+  "main": "gl2js.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IvanSanchez/gobble-gl2js.git"
+  },  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "gobble",
+    "gobble-plugin",
+    "webgl",
+    "glsl"
+  ],  "author": "Iván Sánchez Ortega <ivan@sanchezortega.es>",
+  "bugs": {
+    "url": "https://github.com/IvanSanchez/gobble-gl2js/issues"
+  },
+  "license": "Beerware",
+  "dependencies": {
+    "jsesc": "^0.5.0",
+    "promise-map-series": "^0.2.1",
+    "sander": "^0.3.4"
+  }
+}
