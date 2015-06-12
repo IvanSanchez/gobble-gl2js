@@ -50,11 +50,16 @@ function gl2js ( inputdir, outputdir, options ) {
 				if (options.format === 'module') {
 					minified = 'module.exports = ' + minified + ';\n';
 				} else {	// variable
-					var variableName = options.prefix + filename.replace(pattern, '');
-					minified = 'var ' + variableName + ' = ' + minified + ';\n';
+					var variableName = (options.variablePrefix || '') + filename.replace(pattern, '');
+
+					if (variableName.indexOf('.') === -1) {
+						variableName = 'var ' + variableName;
+					}
+
+					minified = variableName + ' = ' + minified + ';\n';
 				}
 
-				var outFilename = options.filePrefix + filename.replace(pattern, '.js')
+				var outFilename = (options.filePrefix || '') + filename.replace(pattern, '.js')
 				return sander.writeFile( outputdir, outFilename, minified);
 			});
 		});
