@@ -22,7 +22,11 @@ npm i -D gobble-gl2js
 
 ```js
 var gobble = require( 'gobble' );
-module.exports = gobble( 'src/shaders' ).transform( 'gl2js', { format: 'variable' });
+module.exports = gobble( 'src/shaders' ).transform( 'gl2js', {
+	format: 'variable',
+	variablePrefix: 'MyPrefix.',
+	filePrefix: 'MyProject.'
+});
 ```
 
 Gobble-gl2js will generate one javascript file per GLSL file, retaining the name. It's up to you to take those javascript files and include them somewhere else in your javascript code.
@@ -42,6 +46,22 @@ If `format` is `module`, the output files will contain:
 ```js
 module.exports = '(GLSL shader code)';
 ```
+
+### option `variablePrefix`
+
+If a `variablePrefix` option is used, it will be prepended to the variable name. e.g if `variablePrefix` is set to `MyPrefix.`:
+
+```js
+var MyPrefix.origin_filename = '(GLSL shader code)';
+```
+
+Obviously this option only has an effect when `format` is `variable`.
+
+### option `variablePrefix`
+
+If a `filePrefix` option is used, it will be prepended to the output filename. e.g if `filePrefix` is set to `MyProject.`, a file named `polygonShader.glsl` will be converted into `MyProject.polygonShader.js`.
+
+This is useful when avoiding name collisions between your javascript files.
 
 ## License
 
