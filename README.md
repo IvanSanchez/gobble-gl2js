@@ -33,18 +33,24 @@ Gobble-gl2js will generate one javascript file per GLSL file, retaining the name
 
 ### option `format`
 
-Two formats are supported: shader strings as variables or shader strings as modules.
+Three output formats are supported:
 
-If `format` is `variable`, the output files will contain:
+If `format` is `variable`, the output files will contain a variable definition defining the string:
 
 ```js
 var origin_filename = '(GLSL shader code)';
 ```
 
-If `format` is `module`, the output files will contain:
+If `format` is `module`, the output files will contain a CommonJS module exporing the string:
 
 ```js
 module.exports = '(GLSL shader code)';
+```
+
+If `format` is `string`, the output files will contain the bare string (which is a valid Javascript statement, so that's a valid JS file).
+
+```js
+'(GLSL shader code)'
 ```
 
 ### option `variablePrefix`
@@ -57,7 +63,7 @@ var MyPrefix.origin_filename = '(GLSL shader code)';
 
 Obviously this option only has an effect when `format` is `variable`.
 
-### option `variablePrefix`
+### option `filePrefix`
 
 If a `filePrefix` option is used, it will be prepended to the output filename. e.g if `filePrefix` is set to `MyProject.`, a file named `polygonShader.glsl` will be converted into `MyProject.polygonShader.js`.
 

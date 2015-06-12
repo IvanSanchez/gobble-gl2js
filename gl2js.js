@@ -91,6 +91,8 @@ function gl2js ( inputdir, outputdir, options ) {
 
 				if (options.format === 'module') {
 					minified = 'module.exports = ' + minified + ';\n';
+				} else if (options.format === 'string') {
+					minified = minified;
 				} else {	// variable
 					var variableName = (options.variablePrefix || '') + filename.replace(pattern, '');
 
