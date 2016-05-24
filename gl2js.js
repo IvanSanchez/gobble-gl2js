@@ -1,7 +1,6 @@
 /*
 
 🦃namespace gl2js
-🦃inherit File transformer
 
 Convert GLSL files into minified Javascript strings.
 
@@ -15,8 +14,8 @@ Acknowledments to the [mapbox/glify](https://github.com/mapbox/glify) authors, f
 
 ```
 module.exports = gobble( 'src/shaders' ).transform( 'gl2js', {
-format: 'raw'
-	});
+	format: 'raw'
+});
 ```
 
 By default, the `gl2js` transform will take any `*.glsl` files and output `*.js`
@@ -125,7 +124,12 @@ gl2js.defaults = {
 	format: 'raw',
 
 	// Standard options from file transformers
+	// 🦃option accept: [String] = ['.glsl']
+	// The file extensions this transformer handles; non-matching files will be silently passed to the next node.
 	accept: ['.glsl'],
+
+	// 🦃option ext: String = '.js'
+	// The file extension this file transformer outputs.
 	ext: '.js'
 };
 
