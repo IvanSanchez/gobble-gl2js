@@ -1,6 +1,31 @@
+/*
+
+🦃namespace gl2js
+🦃inherit File transformer
+
+Convert GLSL files into minified Javascript strings.
+
+When developing WebGL applications, shader code written in GLSL must end up as a javascript variable somehow. There are several ways to do this, such as including files in the browser as `<script>` and then reading their contents, or using [mapbox/glify](https://github.com/mapbox/glify) if you're using Browserify to pack the application.
+
+Gobble-gl2js works like glify, but with [Gobble](https://github.com/gobblejs/gobble) instead of Browserify. It will go through a directory with `*.glsl` files and output Javascript files which contain the minified shader code.
+
+Acknowledments to the [mapbox/glify](https://github.com/mapbox/glify) authors, from which I borrowed the idea of having a static version of [glsl-unit](https://code.google.com/p/glsl-unit/)
+
+🦃example
+
+```
+module.exports = gobble( 'src/shaders' ).transform( 'gl2js', {
+format: 'raw'
+	});
+```
+
+By default, the `gl2js` transform will take any `*.glsl` files and output `*.js`
+files. This is a file transform, so it will not modify any files other than `*.glsl`.
+
+*/
+
 
 var glslunit = require('./lib/glsl-compiler');
-
 
 
 // Override glslunit.compiler.VariableMinifier.prototype.performStep so it reuses
@@ -70,50 +95,37 @@ function minifyGlsl(code) {
 	return glslunit.Generator.getSourceCode(shaderProgram.vertexAst);
 }
 
-var sander = require( 'sander' );
-var mapSeries = require( 'promise-map-series' );
 var jsesc = require('jsesc');
-var pattern = /\.glsl$/;
-
 
 module.exports = gl2js;
 
-function gl2js ( inputdir, outputdir, options ) {
+function gl2js ( code, options ) {
 
-	return sander.lsr( inputdir ).then( function ( filenames ) {
+	var minified = minifyGlsl(code.toString());
 
-		return mapSeries( filenames, function ( filename ) {
-// 			console.log('gl2js: ', filename, '→', filename.replace(pattern, '.js'));
-			if (! filename.match(pattern)) return;
+	if (options.format !== 'raw') {
+		minified = jsesc(minified, {wrap: true});
+	}
 
-			return sander.readFile(inputdir, filename).then(function(code){
-				var minified = jsesc(minifyGlsl(code.toString()), {wrap: true});
+	if (options.format === 'module') {
+		minified = 'module.exports = ' + minified + ';\n';
+	}
 
-				if (options.format === 'module') {
-					minified = 'module.exports = ' + minified + ';\n';
-				} else if (options.format === 'string') {
-					minified = minified;
-				} else {	// variable
-					var variableName = (options.variablePrefix || '') + filename.replace(pattern, '');
-
-					if (variableName.indexOf('.') === -1) {
-						variableName = 'var ' + variableName;
-					}
-
-					minified = variableName + ' = ' + minified + ';\n';
-				}
-
-				var outFilename = (options.filePrefix || '') + filename.replace(pattern, '.js')
-				return sander.writeFile( outputdir, outFilename, minified);
-			});
-		});
-	});
+	return minified;
 };
 
 
+
 gl2js.defaults = {
-	format: 'variable',
-	variablePrefix: '',
-	filePrefix: ''
+	// 🦃option format: String = 'variable'
+	// Defines the output format. Valid values are:
+	// * `'module'`: exports the GLSL code as a string into `module.exports`, in CommonJS style.
+	// * `'string'`: exports the GLSL code as a bare string (which is valid a JS statement).
+	// * `'raw'`: writes raw GLSL into the output file (for use with `rollup-plugin-string` and the like)
+	format: 'raw',
+
+	// Standard options from file transformers
+	accept: ['.glsl'],
+	ext: '.js'
 };
 

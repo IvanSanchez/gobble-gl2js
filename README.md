@@ -23,9 +23,7 @@ npm i -D gobble-gl2js
 ```js
 var gobble = require( 'gobble' );
 module.exports = gobble( 'src/shaders' ).transform( 'gl2js', {
-	format: 'variable',
-	variablePrefix: 'MyPrefix.',
-	filePrefix: 'MyProject.'
+	format: 'raw'
 });
 ```
 
@@ -34,12 +32,6 @@ Gobble-gl2js will generate one javascript file per GLSL file, retaining the name
 ### option `format`
 
 Three output formats are supported:
-
-If `format` is `variable`, the output files will contain a variable definition defining the string:
-
-```js
-var origin_filename = '(GLSL shader code)';
-```
 
 If `format` is `module`, the output files will contain a CommonJS module exporing the string:
 
@@ -53,21 +45,19 @@ If `format` is `string`, the output files will contain the bare string (which is
 '(GLSL shader code)'
 ```
 
-### option `variablePrefix`
+If `format` is `raw`, the output files will contain bare GLSL (for use with `rollup-plugin-string` and the like):
 
-If a `variablePrefix` option is used, it will be prepended to the variable name. e.g if `variablePrefix` is set to `MyPrefix.`:
-
-```js
-var MyPrefix.origin_filename = '(GLSL shader code)';
+```
+(GLSL shader code)
 ```
 
-Obviously this option only has an effect when `format` is `variable`.
+### option `accept`
 
-### option `filePrefix`
+Standard option from Gobble file transformers, specifies which file extensions this plugin will handle. Defaults to `'.glsl'`.
 
-If a `filePrefix` option is used, it will be prepended to the output filename. e.g if `filePrefix` is set to `MyProject.`, a file named `polygonShader.glsl` will be converted into `MyProject.polygonShader.js`.
+### option `ext`
 
-This is useful when avoiding name collisions between your javascript files.
+Standard option from Gobble file transformers, specifies which file extensions this plugin will output. Defaults to `'.js'`.
 
 ## License
 

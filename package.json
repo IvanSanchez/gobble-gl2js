@@ -1,7 +1,7 @@
 {
   "name": "gobble-gl2js",
-  "version": "0.3.0",
-  "description": "",
+  "version": "0.4.0",
+  "description": "Minify your GLSL code in your GobbleJS workflow",
   "main": "gl2js.js",
   "repository": {
     "type": "git",
@@ -20,8 +20,6 @@
   },
   "license": "Beerware",
   "dependencies": {
-    "jsesc": "^0.5.0",
-    "promise-map-series": "^0.2.1",
-    "sander": "^0.3.4"
+    "jsesc": "^0.5.0"
   }
 }
